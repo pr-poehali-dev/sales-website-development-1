@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Icon from '@/components/ui/icon';
 
 interface Account {
@@ -19,60 +18,75 @@ interface Account {
   features: string[];
   image: string;
   verified: boolean;
+  discount?: number;
 }
 
 const accounts: Account[] = [
   {
     id: 1,
-    name: 'Legendary Pro Account',
-    price: 4990,
-    level: 156,
-    robux: 5000,
-    items: 89,
+    name: 'Mega Legendary PRO',
+    price: 5990,
+    level: 220,
+    robux: 12000,
+    items: 145,
     rarity: 'Legendary',
-    features: ['Premium подписка', 'Редкие скины', 'VIP доступ', 'Достижения'],
+    features: ['Premium год', 'Все пропуска', 'Редкие скины', 'VIP статус'],
     image: 'https://cdn.poehali.dev/projects/15bee1e3-45d9-404e-aad7-734f22f3db09/files/dc092c6b-97fc-4815-9ebf-db5c3ce45198.jpg',
-    verified: true
+    verified: true,
+    discount: 20
   },
   {
     id: 2,
-    name: 'Epic Gamer Pro',
-    price: 2990,
-    level: 98,
-    robux: 2500,
-    items: 54,
+    name: 'Epic Battle King',
+    price: 3490,
+    level: 156,
+    robux: 5000,
+    items: 89,
     rarity: 'Epic',
-    features: ['Premium подписка', 'Много скинов', 'Статистика'],
+    features: ['Premium 6 мес', 'Боевые скины', 'Оружие', 'Достижения'],
     image: 'https://cdn.poehali.dev/projects/15bee1e3-45d9-404e-aad7-734f22f3db09/files/d4cef626-0dab-41bf-999f-80aa5419be68.jpg',
     verified: true
   },
   {
     id: 3,
-    name: 'Rare Starter Pack',
-    price: 1490,
-    level: 45,
-    robux: 800,
-    items: 28,
+    name: 'Rare Collector',
+    price: 1990,
+    level: 98,
+    robux: 2500,
+    items: 54,
     rarity: 'Rare',
-    features: ['Premium 1 месяц', 'Базовые скины', 'Стартовый набор'],
+    features: ['Premium 3 мес', 'Много скинов', 'Статистика'],
     image: 'https://cdn.poehali.dev/projects/15bee1e3-45d9-404e-aad7-734f22f3db09/files/44887c32-8ce5-4f08-8653-7e1542049d6e.jpg',
-    verified: false
+    verified: true
   },
   {
     id: 4,
-    name: 'Premium Collector',
-    price: 5990,
-    level: 203,
-    robux: 8000,
-    items: 156,
+    name: 'Ultimate Champion',
+    price: 7990,
+    level: 305,
+    robux: 18000,
+    items: 203,
     rarity: 'Legendary',
-    features: ['Premium год', 'Эксклюзивы', 'Все DLC', 'Топ рейтинг'],
+    features: ['Premium навсегда', 'ВСЕ DLC', 'Топ-1 рейтинг', 'Эксклюзивы'],
+    image: '/placeholder.svg',
+    verified: true,
+    discount: 15
+  },
+  {
+    id: 5,
+    name: 'Epic Gamer Pro',
+    price: 2990,
+    level: 120,
+    robux: 3500,
+    items: 72,
+    rarity: 'Epic',
+    features: ['Premium 6 мес', 'Скины', 'Оружие', 'Пропуски'],
     image: '/placeholder.svg',
     verified: true
   },
   {
-    id: 5,
-    name: 'Common Beginner',
+    id: 6,
+    name: 'Common Starter',
     price: 590,
     level: 12,
     robux: 200,
@@ -83,16 +97,29 @@ const accounts: Account[] = [
     verified: false
   },
   {
-    id: 6,
-    name: 'Epic Battle Master',
-    price: 3490,
-    level: 120,
-    robux: 3500,
-    items: 72,
-    rarity: 'Epic',
-    features: ['Premium полгода', 'Боевые скины', 'Оружие'],
+    id: 7,
+    name: 'Rare Adventurer',
+    price: 1490,
+    level: 65,
+    robux: 1500,
+    items: 35,
+    rarity: 'Rare',
+    features: ['Premium 2 мес', 'Стартовые скины', 'Инвентарь'],
     image: '/placeholder.svg',
     verified: true
+  },
+  {
+    id: 8,
+    name: 'Epic Warrior Max',
+    price: 4290,
+    level: 178,
+    robux: 6500,
+    items: 112,
+    rarity: 'Epic',
+    features: ['Premium год', 'Военные скины', 'Транспорт', 'Питомцы'],
+    image: '/placeholder.svg',
+    verified: true,
+    discount: 10
   }
 ];
 
@@ -100,28 +127,30 @@ const rarityColors = {
   Common: 'bg-gray-500',
   Rare: 'bg-blue-500',
   Epic: 'bg-purple-500',
-  Legendary: 'bg-yellow-500'
+  Legendary: 'bg-amber-500'
 };
 
-const rarityGradients = {
-  Common: 'from-gray-500/20 to-gray-500/5',
-  Rare: 'from-blue-500/20 to-blue-500/5',
-  Epic: 'from-purple-500/20 to-purple-500/5',
-  Legendary: 'from-yellow-500/20 to-yellow-500/5'
+const rarityBorders = {
+  Common: 'border-gray-500/30',
+  Rare: 'border-blue-500/30',
+  Epic: 'border-purple-500/30',
+  Legendary: 'border-amber-500/30'
 };
 
 export default function Index() {
-  const [priceRange, setPriceRange] = useState([0, 6000]);
-  const [levelRange, setLevelRange] = useState([0, 250]);
+  const [priceRange, setPriceRange] = useState([0, 8000]);
+  const [levelRange, setLevelRange] = useState([0, 350]);
   const [selectedRarities, setSelectedRarities] = useState<string[]>(['Common', 'Rare', 'Epic', 'Legendary']);
   const [minRobux, setMinRobux] = useState(0);
+  const [onlyVerified, setOnlyVerified] = useState(false);
 
   const filteredAccounts = accounts.filter(account => {
     const priceMatch = account.price >= priceRange[0] && account.price <= priceRange[1];
     const levelMatch = account.level >= levelRange[0] && account.level <= levelRange[1];
     const rarityMatch = selectedRarities.includes(account.rarity);
     const robuxMatch = account.robux >= minRobux;
-    return priceMatch && levelMatch && rarityMatch && robuxMatch;
+    const verifiedMatch = !onlyVerified || account.verified;
+    return priceMatch && levelMatch && rarityMatch && robuxMatch && verifiedMatch;
   });
 
   const toggleRarity = (rarity: string) => {
@@ -132,108 +161,97 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/80 to-secondary py-20 px-6">
+      <div className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-secondary py-20 px-6">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-accent rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-20 w-40 h-40 bg-secondary rounded-full blur-3xl"></div>
+          <div className="absolute top-10 left-10 w-40 h-40 bg-accent rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-48 h-48 bg-secondary rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-1/2 left-1/2 w-36 h-36 bg-accent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
         
-        <div className="container mx-auto text-center relative z-10 animate-fade-in">
-          <div className="inline-block mb-6">
-            <Badge className="bg-accent text-accent-foreground px-6 py-2 text-lg font-bold animate-scale-in">
-              🎮 ROBLOX ACCOUNTS SHOP
-            </Badge>
+        <div className="container mx-auto text-center relative z-10">
+          <div className="inline-block mb-8 animate-scale-in">
+            <h1 className="text-6xl md:text-8xl font-black text-white mb-2 tracking-tighter drop-shadow-2xl" style={{ textShadow: '0 0 30px rgba(230, 57, 70, 0.5), 0 0 60px rgba(230, 57, 70, 0.3)' }}>
+              СДЕРШОП
+            </h1>
+            <div className="flex items-center justify-center gap-2">
+              <div className="h-1 w-12 bg-accent"></div>
+              <p className="text-white/90 text-lg tracking-widest uppercase font-bold">Roblox Accounts</p>
+              <div className="h-1 w-12 bg-accent"></div>
+            </div>
           </div>
-          <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight drop-shadow-2xl">
-            Купи аккаунт мечты!
-          </h1>
-          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Тысячи аккаунтов с робаксами, скинами и достижениями. Моментальная передача!
+          
+          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto animate-fade-in">
+            Лучшие аккаунты с робаксами, скинами и достижениями. <br/>Моментальная передача 24/7!
           </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-bold shadow-2xl shadow-accent/50 animate-scale-in">
-              <Icon name="ShoppingCart" className="mr-2" />
+          
+          <div className="flex gap-4 justify-center flex-wrap animate-slide-up">
+            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-bold shadow-2xl shadow-accent/50 px-8">
+              <Icon name="ShoppingBag" className="mr-2" />
               Смотреть каталог
             </Button>
             <Button size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white/30 font-bold backdrop-blur-sm">
-              <Icon name="Shield" className="mr-2" />
-              Гарантии
+              <Icon name="MessageCircle" className="mr-2" />
+              Связаться
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-3 gap-8 mb-20">
-          <Card className="text-center border-primary/30 hover:border-primary transition-all hover:shadow-xl hover:shadow-primary/20 bg-card/50 backdrop-blur-sm animate-slide-up">
-            <CardHeader>
-              <div className="mx-auto w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-4">
-                <Icon name="Zap" className="w-8 h-8 text-primary" />
-              </div>
-              <CardTitle className="text-xl">Моментальная передача</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Получите аккаунт сразу после оплаты</p>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center border-secondary/30 hover:border-secondary transition-all hover:shadow-xl hover:shadow-secondary/20 bg-card/50 backdrop-blur-sm animate-slide-up" style={{ animationDelay: '100ms' }}>
-            <CardHeader>
-              <div className="mx-auto w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mb-4">
-                <Icon name="Shield" className="w-8 h-8 text-secondary" />
-              </div>
-              <CardTitle className="text-xl">100% безопасно</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Все аккаунты проверены и защищены</p>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center border-accent/30 hover:border-accent transition-all hover:shadow-xl hover:shadow-accent/20 bg-card/50 backdrop-blur-sm animate-slide-up" style={{ animationDelay: '200ms' }}>
-            <CardHeader>
-              <div className="mx-auto w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center mb-4">
-                <Icon name="Headphones" className="w-8 h-8 text-accent" />
-              </div>
-              <CardTitle className="text-xl">Поддержка 24/7</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Поможем с любым вопросом</p>
-            </CardContent>
-          </Card>
+      <div className="container mx-auto px-6 py-12">
+        <div className="grid md:grid-cols-4 gap-6 -mt-20 mb-16 relative z-10">
+          {[
+            { icon: 'Zap', title: 'Моментально', desc: 'Получите за 2 минуты', color: 'primary' },
+            { icon: 'Shield', title: 'Безопасно', desc: 'Все проверено', color: 'secondary' },
+            { icon: 'Headphones', title: 'Поддержка 24/7', desc: 'Всегда на связи', color: 'accent' },
+            { icon: 'Award', title: 'Гарантия', desc: 'Возврат денег', color: 'primary' }
+          ].map((item, idx) => (
+            <Card key={idx} className="text-center border-primary/20 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 bg-card/90 backdrop-blur-sm animate-slide-up" style={{ animationDelay: `${idx * 100}ms` }}>
+              <CardHeader>
+                <div className="mx-auto w-14 h-14 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl flex items-center justify-center mb-3">
+                  <Icon name={item.icon as any} className={`w-7 h-7 text-${item.color}`} />
+                </div>
+                <CardTitle className="text-lg">{item.title}</CardTitle>
+                <p className="text-sm text-muted-foreground">{item.desc}</p>
+              </CardHeader>
+            </Card>
+          ))}
         </div>
 
-        <Separator className="my-16 bg-border" />
+        <Separator className="my-12 bg-border" />
 
         <div>
-          <h2 className="text-4xl font-black mb-12 text-center bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-            Каталог аккаунтов
-          </h2>
+          <div className="text-center mb-12">
+            <h2 className="text-5xl font-black mb-4 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+              Каталог аккаунтов
+            </h2>
+            <p className="text-muted-foreground text-lg">Выберите идеальный аккаунт для себя</p>
+          </div>
           
           <div className="grid lg:grid-cols-4 gap-8">
             <div className="lg:col-span-1">
-              <Card className="sticky top-6 border-primary/20 bg-card/80 backdrop-blur-sm">
+              <Card className="sticky top-6 border-primary/20 bg-card/90 backdrop-blur-sm">
                 <CardHeader>
-                  <CardTitle className="flex items-center text-primary">
+                  <CardTitle className="flex items-center text-primary text-xl">
                     <Icon name="SlidersHorizontal" className="mr-2" />
                     Фильтры
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
-                    <h3 className="font-semibold mb-4 flex items-center">
-                      <Icon name="Gem" className="w-4 h-4 mr-2 text-accent" />
+                    <h3 className="font-bold mb-4 flex items-center text-base">
+                      <Icon name="Gem" className="w-5 h-5 mr-2 text-accent" />
                       Редкость
                     </h3>
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       {(['Legendary', 'Epic', 'Rare', 'Common'] as const).map(rarity => (
-                        <div key={rarity} className="flex items-center space-x-2">
+                        <div key={rarity} className="flex items-center space-x-3">
                           <Checkbox
                             id={rarity}
                             checked={selectedRarities.includes(rarity)}
                             onCheckedChange={() => toggleRarity(rarity)}
                           />
-                          <label htmlFor={rarity} className="text-sm cursor-pointer flex items-center">
-                            <span className={`w-3 h-3 rounded-full ${rarityColors[rarity]} mr-2`}></span>
+                          <label htmlFor={rarity} className="text-sm cursor-pointer flex items-center font-medium">
+                            <span className={`w-3 h-3 rounded-full ${rarityColors[rarity]} mr-2 shadow-lg`}></span>
                             {rarity}
                           </label>
                         </div>
@@ -244,13 +262,17 @@ export default function Index() {
                   <Separator className="bg-border" />
 
                   <div>
-                    <h3 className="font-semibold mb-4 flex items-center">
-                      <Icon name="Wallet" className="w-4 h-4 mr-2 text-accent" />
-                      Цена: {priceRange[0]} ₽ - {priceRange[1]} ₽
+                    <h3 className="font-bold mb-4 flex items-center text-base">
+                      <Icon name="Wallet" className="w-5 h-5 mr-2 text-accent" />
+                      Цена
                     </h3>
+                    <div className="mb-3 flex justify-between text-sm font-semibold">
+                      <span className="text-primary">{priceRange[0]} ₽</span>
+                      <span className="text-primary">{priceRange[1]} ₽</span>
+                    </div>
                     <Slider
                       min={0}
-                      max={6000}
+                      max={8000}
                       step={100}
                       value={priceRange}
                       onValueChange={setPriceRange}
@@ -261,14 +283,18 @@ export default function Index() {
                   <Separator className="bg-border" />
 
                   <div>
-                    <h3 className="font-semibold mb-4 flex items-center">
-                      <Icon name="TrendingUp" className="w-4 h-4 mr-2 text-accent" />
-                      Уровень: {levelRange[0]} - {levelRange[1]}
+                    <h3 className="font-bold mb-4 flex items-center text-base">
+                      <Icon name="TrendingUp" className="w-5 h-5 mr-2 text-accent" />
+                      Уровень
                     </h3>
+                    <div className="mb-3 flex justify-between text-sm font-semibold">
+                      <span className="text-primary">{levelRange[0]}</span>
+                      <span className="text-primary">{levelRange[1]}</span>
+                    </div>
                     <Slider
                       min={0}
-                      max={250}
-                      step={5}
+                      max={350}
+                      step={10}
                       value={levelRange}
                       onValueChange={setLevelRange}
                       className="mb-2"
@@ -278,57 +304,93 @@ export default function Index() {
                   <Separator className="bg-border" />
 
                   <div>
-                    <h3 className="font-semibold mb-4 flex items-center">
-                      <Icon name="Coins" className="w-4 h-4 mr-2 text-accent" />
-                      Мин. робаксы: {minRobux}
+                    <h3 className="font-bold mb-4 flex items-center text-base">
+                      <Icon name="Coins" className="w-5 h-5 mr-2 text-accent" />
+                      Мин. робаксы
                     </h3>
+                    <div className="mb-3 text-sm font-semibold text-primary">
+                      {minRobux.toLocaleString()} R$
+                    </div>
                     <Slider
                       min={0}
-                      max={10000}
-                      step={100}
+                      max={20000}
+                      step={500}
                       value={[minRobux]}
                       onValueChange={(value) => setMinRobux(value[0])}
                       className="mb-2"
                     />
                   </div>
 
+                  <Separator className="bg-border" />
+
+                  <div className="flex items-center space-x-3">
+                    <Checkbox
+                      id="verified"
+                      checked={onlyVerified}
+                      onCheckedChange={(checked) => setOnlyVerified(checked as boolean)}
+                    />
+                    <label htmlFor="verified" className="text-sm cursor-pointer flex items-center font-medium">
+                      <Icon name="BadgeCheck" className="w-4 h-4 mr-1 text-secondary" />
+                      Только проверенные
+                    </label>
+                  </div>
+
                   <Button 
                     variant="outline" 
-                    className="w-full border-primary/30 hover:bg-primary/10"
+                    className="w-full border-primary/30 hover:bg-primary/10 font-semibold"
                     onClick={() => {
-                      setPriceRange([0, 6000]);
-                      setLevelRange([0, 250]);
+                      setPriceRange([0, 8000]);
+                      setLevelRange([0, 350]);
                       setSelectedRarities(['Common', 'Rare', 'Epic', 'Legendary']);
                       setMinRobux(0);
+                      setOnlyVerified(false);
                     }}
                   >
-                    Сбросить фильтры
+                    <Icon name="X" className="w-4 h-4 mr-2" />
+                    Сбросить
                   </Button>
                 </CardContent>
               </Card>
             </div>
 
             <div className="lg:col-span-3">
-              <div className="mb-6 flex justify-between items-center">
-                <p className="text-muted-foreground">
-                  Найдено аккаунтов: <span className="font-bold text-foreground text-xl">{filteredAccounts.length}</span>
-                </p>
+              <div className="mb-8 p-4 bg-card/50 backdrop-blur-sm rounded-lg border border-primary/20 flex justify-between items-center">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Найдено аккаунтов</p>
+                  <p className="text-3xl font-black text-primary">{filteredAccounts.length}</p>
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" className="font-semibold">
+                    <Icon name="ArrowUpDown" className="w-4 h-4 mr-1" />
+                    По цене
+                  </Button>
+                  <Button variant="outline" size="sm" className="font-semibold">
+                    <Icon name="Star" className="w-4 h-4 mr-1" />
+                    Популярные
+                  </Button>
+                </div>
               </div>
 
               <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredAccounts.map((account, index) => (
                   <Card 
                     key={account.id} 
-                    className={`group relative overflow-hidden hover:shadow-2xl transition-all duration-300 animate-scale-in border-2 bg-gradient-to-br ${rarityGradients[account.rarity]} hover:border-${account.rarity === 'Legendary' ? 'yellow' : account.rarity === 'Epic' ? 'purple' : account.rarity === 'Rare' ? 'blue' : 'gray'}-500/50`}
+                    className={`group relative overflow-hidden hover:shadow-2xl transition-all duration-300 animate-scale-in border-2 ${rarityBorders[account.rarity]} hover:border-${account.rarity === 'Legendary' ? 'amber' : account.rarity === 'Epic' ? 'purple' : account.rarity === 'Rare' ? 'blue' : 'gray'}-500/60 bg-card/80 backdrop-blur-sm`}
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
-                    <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent"></div>
-                    
+                    {account.discount && (
+                      <div className="absolute top-4 left-4 z-20">
+                        <Badge className="bg-accent text-accent-foreground font-bold shadow-lg">
+                          -{account.discount}%
+                        </Badge>
+                      </div>
+                    )}
+
                     {account.verified && (
-                      <div className="absolute top-4 right-4 z-10">
-                        <Badge className="bg-secondary text-secondary-foreground">
+                      <div className="absolute top-4 right-4 z-20">
+                        <Badge className="bg-secondary text-secondary-foreground font-bold shadow-lg">
                           <Icon name="BadgeCheck" className="w-3 h-3 mr-1" />
-                          Проверен
+                          ✓
                         </Badge>
                       </div>
                     )}
@@ -338,47 +400,49 @@ export default function Index() {
                         <img 
                           src={account.image} 
                           alt={account.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         />
-                        <Badge className={`absolute top-4 left-4 ${rarityColors[account.rarity]} text-white font-bold px-3 py-1`}>
-                          {account.rarity}
-                        </Badge>
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                          <Badge className={`${rarityColors[account.rarity]} text-white font-bold px-3 py-1 shadow-lg`}>
+                            ⭐ {account.rarity}
+                          </Badge>
+                        </div>
                       </div>
                     </CardHeader>
 
-                    <CardContent className="p-6">
-                      <CardTitle className="mb-3 text-xl">{account.name}</CardTitle>
+                    <CardContent className="p-5">
+                      <CardTitle className="mb-4 text-xl font-black">{account.name}</CardTitle>
                       
                       <div className="grid grid-cols-3 gap-2 mb-4">
-                        <div className="bg-muted/50 rounded-lg p-2 text-center">
+                        <div className="bg-muted/50 rounded-lg p-2.5 text-center hover:bg-muted transition-colors">
                           <Icon name="TrendingUp" className="w-4 h-4 mx-auto mb-1 text-primary" />
-                          <p className="text-xs text-muted-foreground">Уровень</p>
-                          <p className="font-bold">{account.level}</p>
+                          <p className="text-[10px] text-muted-foreground uppercase font-bold">Уровень</p>
+                          <p className="font-black text-sm">{account.level}</p>
                         </div>
-                        <div className="bg-muted/50 rounded-lg p-2 text-center">
+                        <div className="bg-muted/50 rounded-lg p-2.5 text-center hover:bg-muted transition-colors">
                           <Icon name="Coins" className="w-4 h-4 mx-auto mb-1 text-accent" />
-                          <p className="text-xs text-muted-foreground">Робаксы</p>
-                          <p className="font-bold">{account.robux}</p>
+                          <p className="text-[10px] text-muted-foreground uppercase font-bold">Робаксы</p>
+                          <p className="font-black text-sm">{account.robux}</p>
                         </div>
-                        <div className="bg-muted/50 rounded-lg p-2 text-center">
+                        <div className="bg-muted/50 rounded-lg p-2.5 text-center hover:bg-muted transition-colors">
                           <Icon name="Package" className="w-4 h-4 mx-auto mb-1 text-secondary" />
-                          <p className="text-xs text-muted-foreground">Предметы</p>
-                          <p className="font-bold">{account.items}</p>
+                          <p className="text-[10px] text-muted-foreground uppercase font-bold">Предметы</p>
+                          <p className="font-black text-sm">{account.items}</p>
                         </div>
                       </div>
 
-                      <div className="flex flex-wrap gap-1 mb-4">
+                      <div className="flex flex-wrap gap-1.5 mb-4">
                         {account.features.slice(0, 3).map((feature, idx) => (
-                          <Badge key={idx} variant="outline" className="text-xs border-primary/30">
+                          <Badge key={idx} variant="outline" className="text-[10px] border-primary/30 font-semibold">
                             {feature}
                           </Badge>
                         ))}
                       </div>
                     </CardContent>
 
-                    <CardFooter className="p-6 pt-0 flex justify-between items-center">
+                    <CardFooter className="p-5 pt-0 flex justify-between items-center">
                       <div>
-                        <p className="text-xs text-muted-foreground">Цена</p>
+                        <p className="text-xs text-muted-foreground uppercase font-bold mb-1">Цена</p>
                         <p className="text-2xl font-black text-primary">
                           {account.price.toLocaleString()} ₽
                         </p>
@@ -394,101 +458,42 @@ export default function Index() {
             </div>
           </div>
         </div>
-
-        <Separator className="my-16 bg-border" />
-
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl font-black mb-12 text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Частые вопросы
-          </h2>
-          
-          <Accordion type="single" collapsible className="space-y-4">
-            <AccordionItem value="item-1" className="border border-primary/20 rounded-lg px-6 bg-card/50">
-              <AccordionTrigger className="text-lg font-semibold hover:text-primary">
-                Как происходит передача аккаунта?
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                После оплаты вы моментально получаете данные для входа (логин и пароль) на вашу электронную почту. 
-                Весь процесс занимает не более 2 минут!
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="item-2" className="border border-primary/20 rounded-lg px-6 bg-card/50">
-              <AccordionTrigger className="text-lg font-semibold hover:text-primary">
-                Безопасно ли покупать аккаунты?
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                Да! Все аккаунты проверены нашей службой безопасности. Мы гарантируем, что аккаунты не забанены 
-                и соответствуют описанию. При любых проблемах действует гарантия возврата средств.
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="item-3" className="border border-primary/20 rounded-lg px-6 bg-card/50">
-              <AccordionTrigger className="text-lg font-semibold hover:text-primary">
-                Что делать, если не могу войти в аккаунт?
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                Свяжитесь с нашей поддержкой 24/7 через чат на сайте или Telegram. 
-                Мы поможем решить проблему или вернем деньги в течение 24 часов.
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="item-4" className="border border-primary/20 rounded-lg px-6 bg-card/50">
-              <AccordionTrigger className="text-lg font-semibold hover:text-primary">
-                Можно ли вернуть деньги?
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                Возврат возможен в течение 24 часов после покупки, если аккаунт не соответствует описанию 
-                или возникли технические проблемы с доступом.
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="item-5" className="border border-primary/20 rounded-lg px-6 bg-card/50">
-              <AccordionTrigger className="text-lg font-semibold hover:text-primary">
-                Какие способы оплаты доступны?
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                Принимаем карты (Visa, MasterCard, Мир), электронные кошельки (QIWI, ЮMoney), 
-                криптовалюту и платежи через СБП.
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </div>
       </div>
 
-      <footer className="bg-card/80 backdrop-blur-sm border-t border-primary/20 py-12 mt-20">
+      <footer className="bg-card/90 backdrop-blur-sm border-t border-primary/20 py-12 mt-20">
         <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="font-bold text-lg mb-4 text-primary">🎮 ROBLOX SHOP</h3>
-              <p className="text-muted-foreground text-sm">
-                Лучший магазин аккаунтов Roblox. Безопасно, быстро, надежно.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-4">Контакты</h3>
+          <div className="text-center mb-8">
+            <h3 className="text-4xl font-black text-primary mb-2">СДЕРШОП</h3>
+            <p className="text-muted-foreground">Лучший магазин Roblox аккаунтов</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div className="text-center">
+              <h4 className="font-bold text-lg mb-3">Контакты</h4>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <p className="flex items-center">
-                  <Icon name="MessageCircle" className="w-4 h-4 mr-2 text-secondary" />
-                  Telegram: @robloxshop
+                <p className="flex items-center justify-center">
+                  <Icon name="Send" className="w-4 h-4 mr-2 text-secondary" />
+                  Telegram: @sdershop
                 </p>
-                <p className="flex items-center">
+                <p className="flex items-center justify-center">
                   <Icon name="Mail" className="w-4 h-4 mr-2 text-secondary" />
-                  support@robloxshop.ru
+                  info@sdershop.ru
                 </p>
               </div>
             </div>
-            <div>
-              <h3 className="font-bold text-lg mb-4">Информация</h3>
+            
+            <div className="text-center">
+              <h4 className="font-bold text-lg mb-3">Информация</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="hover:text-primary cursor-pointer">Как купить</li>
-                <li className="hover:text-primary cursor-pointer">Гарантии</li>
-                <li className="hover:text-primary cursor-pointer">FAQ</li>
+                <li className="hover:text-primary cursor-pointer transition-colors">Как купить</li>
+                <li className="hover:text-primary cursor-pointer transition-colors">Гарантии</li>
+                <li className="hover:text-primary cursor-pointer transition-colors">FAQ</li>
               </ul>
             </div>
-            <div>
-              <h3 className="font-bold text-lg mb-4">Мы в соцсетях</h3>
-              <div className="flex gap-3">
+            
+            <div className="text-center">
+              <h4 className="font-bold text-lg mb-3">Соцсети</h4>
+              <div className="flex gap-3 justify-center">
                 <Button size="icon" variant="outline" className="bg-primary/10 hover:bg-primary/20 border-primary/30">
                   <Icon name="Send" className="w-4 h-4 text-primary" />
                 </Button>
@@ -501,9 +506,10 @@ export default function Index() {
               </div>
             </div>
           </div>
-          <Separator className="my-8 bg-border" />
+          
+          <Separator className="my-6 bg-border" />
           <p className="text-center text-muted-foreground text-sm">
-            © 2024 ROBLOX Accounts Shop. Все права защищены.
+            © 2024 СДЕРШОП. Все права защищены.
           </p>
         </div>
       </footer>
